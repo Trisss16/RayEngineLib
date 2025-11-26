@@ -241,6 +241,7 @@ public final class RayCaster {
         double halfFovTan = Math.tan(fovRad / 2.0);
 
         for (Entity i: entities) {
+            if (!i.visible) continue;
             /*dx y dy son las posiciones de la entidad en un plano cartesiano donde el jugador es el origen*/
             double dx = i.getX() - p.getX();
             double dy = -(i.getY() - p.getY());

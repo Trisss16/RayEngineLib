@@ -16,6 +16,8 @@ public class Entity {
     protected Map map;
     protected Engine e;
     
+    protected boolean visible = true;
+    
 
     //constructores
     
@@ -47,6 +49,11 @@ public class Entity {
     
     public Sprite getSprite() {
         return s;
+    }
+    
+    //mostrar
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
     
     //update y render

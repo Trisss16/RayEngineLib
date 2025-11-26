@@ -25,6 +25,7 @@ public final class Engine extends JFrame{
     
     //elminiar entidades
     private final ArrayList<Entity> nextToBeRemoved;
+    private final ArrayList<Entity> nextToBeAdded;
     
     //para ver loq ue sucede en la vista 2d
     private final Canvas view2d;
@@ -114,6 +115,7 @@ public final class Engine extends JFrame{
         //lista de entidades
         entities = new ArrayList<>();
         nextToBeRemoved = new ArrayList<>();
+        nextToBeAdded = new ArrayList<>();
         
         //lista de banners
         banners = new ArrayList<>();
@@ -443,7 +445,7 @@ public final class Engine extends JFrame{
     
     public void addEntity(Entity en) {
         en.addRef(this, p, map);
-        entities.add(en);
+        nextToBeAdded.add(en);
     }
     
     public void removeEntity(Entity en) {
@@ -463,13 +465,24 @@ public final class Engine extends JFrame{
         return inside;
     }
     
-    private void remove() {
+    private void updateEntitiesList() {
         for (Entity i: nextToBeRemoved) {
             try {
                 entities.remove(i);
             } catch(Exception e) {}
         }
         nextToBeRemoved.clear();
+        
+        for (Entity i: nextToBeAdded) {
+            try {
+                entities.add(i);
+            } catch(Exception e) {}
+        }
+        nextToBeAdded.clear();
+    }
+    
+    public boolean containsEntity(Entity en) {
+        return entities.contains(en);
     }
     
     
@@ -493,7 +506,7 @@ public final class Engine extends JFrame{
         raycaster.update(dt);
         
         //limpia cualquier entidad que haya tenido una llamada de removeEntity
-        remove();
+        updateEntitiesList();
     }
     
     private void updateEntities(double dt) {
