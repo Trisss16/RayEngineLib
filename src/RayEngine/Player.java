@@ -7,7 +7,7 @@ import java.awt.event.*;
  *
  * @author trili
  */
-public final class Player {
+public class Player {
     
     protected int v; //velocidad del jugador
     protected double x;
