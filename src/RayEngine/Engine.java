@@ -402,6 +402,7 @@ public final class Engine extends JFrame{
     
     public void stop() {
         running = false;
+        this.dispose();
     }
     
     
@@ -456,13 +457,15 @@ public final class Engine extends JFrame{
         ArrayList<Entity> inside = new ArrayList<>();
         
         //empieza del ultimo porque la lista está ordenada de mayor a menor
-        for (int i = entities.size() - 1; i >= 0; i--) {
-            Entity en = entities.get(i);
-            if (en.getDistance() <= radius) inside.add(en);
-            else break;
+        for (Entity i: entities) {
+            if (i.getDistance() <= radius) inside.add(i);
         }
         
         return inside;
+    }
+    
+    public ArrayList<Entity> getEntities() {
+        return (ArrayList<Entity>) entities.clone();
     }
     
     private void updateEntitiesList() {
@@ -479,6 +482,9 @@ public final class Engine extends JFrame{
             } catch(Exception e) {}
         }
         nextToBeAdded.clear();
+        
+        //Reor
+        entities.sort((a, b) -> Double.compare(b.getDistance(), a.getDistance()));
     }
     
     public boolean containsEntity(Entity en) {
@@ -504,12 +510,26 @@ public final class Engine extends JFrame{
         p.update(dt);
         updateEntities(dt);
         raycaster.update(dt);
-        
-        //limpia cualquier entidad que haya tenido una llamada de removeEntity
-        updateEntitiesList();
     }
     
     private void updateEntities(double dt) {
+        //elimina las entidades que se tienen que eliminar
+        for (Entity i: nextToBeRemoved) {
+            try {
+                entities.remove(i);
+            } catch(Exception e) {}
+        }
+        nextToBeRemoved.clear();
+        
+        //añade las que se tienen que añadir
+        for (Entity i: nextToBeAdded) {
+            try {
+                entities.add(i);
+            } catch(Exception e) {}
+        }
+        nextToBeAdded.clear();
+        
+        //una vez añadidas se actualizan
         for (Entity i: entities) {
             i.update(dt);
             i.updateDistance();
